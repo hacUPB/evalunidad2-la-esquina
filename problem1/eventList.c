@@ -71,21 +71,31 @@ void AddEvent(EventList *this, Event *event)
 
 void RemoveEvent(EventList *this, char *name)
 {
-    if(this->isEmpty==0)
+    if(this->isEmpty==1)
     {
         Event *evTemp = this->head ;
         Event *evSiguiente = evTemp->next;
-        if(strcmp(evTemp->eventName,name)!=0)
+        
+        if(strcmp(evTemp->eventName,name) == 0)
         {
+            if (evTemp->next==NULL)
+            {
+                this->head = NULL;
+                this->last = NULL;
+                this->isEmpty = 0;
+                free(evTemp);
+            }
+            else
+            {
+                this->head = evSiguiente;
+                free(evTemp);
+            }
+
             while(evSiguiente!=NULL)
             {
                 if(strcmp(evSiguiente->eventName,name)==0)
                 {
                     evTemp->next=evSiguiente->next;
-                    if(evSiguiente->next=NULL)
-                    {
-                        this->last=evTemp;
-                    }
                     free(evSiguiente);
                     return;
                     {
@@ -93,21 +103,6 @@ void RemoveEvent(EventList *this, char *name)
                         evSiguiente=evSiguiente->next;
                     }
                 }
-            }
-        }
-        else
-        {
-            if(evTemp->next==NULL)
-            {
-                free(evTemp);
-                this->head=NULL;
-                this->last=NULL;
-                this->isEmpty=1;
-            }
-            else
-            {
-                free(evTemp);
-                this->head=evSiguiente;
             }
         }
     }
