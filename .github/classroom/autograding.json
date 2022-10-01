@@ -193,7 +193,7 @@
     {
       "name": "19",
       "setup": "",
-      "run": "19",
+      "run": "cd ./problem1 && bash ./test-main.sh -t 18",
       "input": "",
       "output": "",
       "comparison": "included",
