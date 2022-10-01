@@ -5,37 +5,38 @@
 
 EventList *CreateEventList(void)
 {
-    EventList *evList =malloc(sizeof(EventList));
-    evList->head=NULL;
-    evList->last=NULL;
 
-    evList->isEmpty=1;
-    return evList;
+    EventList *eventList =malloc(sizeof(EventList));
+    eventList->head=NULL;
+    eventList->last=NULL;
+
+    eventList->isEmpty=1;
+    return eventList;
 }
 
 void DestroyEventList(EventList *this)
 {
-    free (this);
+    free(this);
 }
 
 Event *SearchEvent(EventList *this, char *name)
 {
-    Event *evTemp=this->head;
-    while(evTemp!=NULL)
+Event *eventoTemp=this->head;
+while(eventoTemp!=NULL)
     {
-        if(strcmp(evTemp->eventName,name)==0)
-        {     
-        return evTemp;     
+        if(strcmp(eventoTemp->eventName,name)==0)
+        {
+            return eventoTemp;     
         }
-        evTemp=evTemp->next;
+        eventoTemp=eventoTemp->next;
     
     }
-
-    return evTemp;
+    return eventoTemp;
 }
 
 void AddEvent(EventList *this, Event *event)
 {
+   
     if(event->eventName!=NULL)
     {
         if((this->head==NULL) && (this->isEmpty==1))
@@ -47,62 +48,66 @@ void AddEvent(EventList *this, Event *event)
         else
         {
             int add=0;
-            Event*evTemp= this->head;
-            while(evTemp!=NULL)
-            {
-                if(strcmp(evTemp->eventName,event->eventName)!=0)
+            Event *eventoTemp= this->head;
+            while(eventoTemp!=NULL)
+            {      
+                if(strcmp(eventoTemp->eventName,event->eventName)!=0)
                 {
-                    if((evTemp==this->last) && (add==0))
+                    if((eventoTemp==this->last) && (add==0))
                     {
                         this->last->next= event;
                         this->last=event;
                         add=1;
                     }
-                    evTemp=evTemp->next;
+                    eventoTemp=eventoTemp->next;       
                 }
                 else
                 {
                     return;
                 }
-            }
+            }  
         }
     }
 }
 
 void RemoveEvent(EventList *this, char *name)
 {
-    if(this->isEmpty==1)
+    if(this->isEmpty==0)
     {
-        Event *evTemp = this->head ;
-        Event *evSiguiente = evTemp->next;
-        
-        if(strcmp(evTemp->eventName,name) == 0)
+        Event *eventoTemp = this->head ;
+        Event *eventosig = eventoTemp->next;
+        if(strcmp(eventoTemp->eventName,name)!=0)
         {
-            if (evTemp->next==NULL)
+            while(eventosig!=NULL)
             {
-                this->head = NULL;
-                this->last = NULL;
-                this->isEmpty = 0;
-                free(evTemp);
+                if(strcmp(eventosig->eventName,name)==0)
+                {
+                    eventoTemp->next=eventosig->next;
+                    if(eventosig->next=NULL)
+                    {
+                        this->last=eventoTemp; 
+                    }
+                    DestroyEvent(eventosig);
+                    return;
+                }  
+            eventoTemp=eventosig;
+            eventosig=eventosig->next;
+            }
+         
+        }
+        else 
+        {
+            if(eventoTemp->next==NULL)
+            {
+                DestroyEvent(eventoTemp);
+                this->head=NULL;
+                this->last=NULL; 
+                this->isEmpty=1;
             }
             else
             {
-                this->head = evSiguiente;
-                free(evTemp);
-            }
-
-            while(evSiguiente!=NULL)
-            {
-                if(strcmp(evSiguiente->eventName,name)==0)
-                {
-                    evTemp->next=evSiguiente->next;
-                    free(evSiguiente);
-                    return;
-                    {
-                        evTemp=evSiguiente;
-                        evSiguiente=evSiguiente->next;
-                    }
-                }
+                DestroyEvent(eventoTemp);
+                this->head=eventosig;
             }
         }
     }
@@ -116,11 +121,11 @@ void ListEvents(EventList *this)
     }
     else
     {
-        Event *evTemp=this->head;
-        while(evTemp!=NULL)
+        Event *eventoTemp=this->head;
+        while(eventoTemp!=NULL)
         {
-            printf("%s\n",evTemp->eventName);
-            evTemp=evTemp->next;
-        }
-    }   
+        printf("%s\n",eventoTemp->eventName);
+        eventoTemp=eventoTemp->next;
+        }   
+    }
 }
